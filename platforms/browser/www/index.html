@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <title>Meu App v. 1.0.0</title>
+
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
+
+        <style type="text/css">
+        	#rodape{
+        		position: absolute;
+        		width: 100%;
+        		bottom: 0;
+
+        	}
+        </style>
+
+        <script type="text/javascript">
+        	window.onload = function(){
+        		document.addEventListener("deviceready", iniciar );
+
+        		function iniciar(){
+        			$("#latitude").hide();
+        			$("#longitude").hide();
+        			$("#local").hide();
+
+        			$("#btn1").attr("disabled", "disabled");
+        			$("#btn2").attr("disabled", "disabled");   
+
+        			$("#mensagem").html("Aguarde...");
+
+        			$("#exibeFoto").attr("src", ""); 
+
+        			navigator.geolocation.getCurrentPosition( geoSucesso, geoErro);
+        		}
+
+        		function geoSucesso(dados){
+        			var lat = dados.coords.latitude;
+        			var long = dados.coords.longitude;
+
+        			localStorage.setItem("lat", lat );
+        			localStorage.setItem("lng", long );
+        		
+        			$("#latitude").html("Sua latitude: " + lat);
+        		
+        			$("#longitude").html("Sua longitude: " + long);
+  
+        			$("#mensagem").html("Sua posição foi definida!");
+
+        			$("#btn1").removeAttr("disabled");
+        			$("#btn2").removeAttr("disabled");
+
+        			var key = "AIzaSyBfTp8FPH8WhprNMuUgjNvOSDnMDaCA1gk";
+
+        			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
+
+        			url += lat + ",";
+        			url += long + "&key=" + key;
+
+        			$.ajax({
+        				dataType: "json",
+        				url: url,
+        				error:function( e ){
+        					$("#local").html("Não foi possível definir a sua localização: " + e.message );
+        				},
+        				success: function(r){
+        					$("#local").html("Sua Localização: " + r.results[1].formatted_address );
+        				}
+        			});
+        		}
+
+        		$("#btn1").on("click", function(){
+    				$("#latitude").show();
+    				$("#longitude").show();
+    				$("#local").show();
+
+    				$("#mensagem").hide();
+
+    				$("#btn1").attr("disabled", "disabled");
+    			});
+
+        		function geoErro(e){
+        			$("#mensagem").html("Não foi possível deifnir sua posição!");
+        		} 
+
+        		$("#btn2").on("click", function(){
+        				window.location.href = "mapa.html";
+        		});
+
+        		$("#btn3").on("click", function(){
+        				window.location.href = "index.html#camera";
+        		}); 
+
+        		$("#btn4").on("click", function(){
+        				var opFoto ={
+        					quality: 50,
+        					sourceType: Camera.PictureSourceType.CAMERA,
+        					destinationType: Camera.DestinationType.FILE_URI,
+        					saveToPhotoAlbum: true,
+        					mediaType: Camera.MediaType.Picture,
+        					targetWidth: 1200,
+        					targetHeight: 800
+        				}
+
+        				navigator.camera.getPicture( fotoSucesso, fotoErro, opFoto );
+        		});
+
+        		$("#btn6").on("click", function(){
+        				window.location.href = "index.html";
+        		}); 
+
+        		function fotoSucesso(foto){
+        			alert( foto );
+        		};
+
+        		function fotoErro(e){
+        			alert( "Erro ao tirar foto: " + e.message );
+        		};    	
+			}
+        </script>
+    </head>
+    <body>
+    	<div data-role="page" id ="principal"> 
+	    	<div data-role="header">
+	    		<h1>Meu App v. 1.0.0</h1>
+	    	</div>
+	    	<div data-role="main" id="conteudo" class="ui-content">
+	    		<div id="latitude"></div>
+	    		<div id="longitude"></div>
+	    		<div id="local"></div>
+	    		<div id="mensagem"></div>
+
+	    		<button id="btn1">Exibir Geolocalização</button>
+	    		<button id="btn2">Exibir Mapa</button>
+	    		<button id="btn3">Camera</button>
+	    	</div>
+	    	<div data-role="footer" id="rodape">
+	    		<h1>Todos os direitos reservados</h1>
+	    	</div>
+	    </div>
+
+	    <div data-role="page" id ="camera"> 
+	    	<div data-role="header">
+	    		<h1>Meu App v. 1.0.0</h1>
+	    	</div>
+	    	<div data-role="main" id="conteudo" class="ui-content">
+	    		<img id="exibeFoto" />
+
+	    		<button id="btn4">Tirar Foto</button>
+	    		<button id="btn5">Exibir Galeria</button>
+	    		<button id="btn6">Voltar</button>
+	    	</div>
+	    	<div data-role="footer" id="rodape">
+	    		<h1>Todos os direitos reservados</h1>
+	    	</div>
+	    </div>
+
+    	<script type="text/javascript" src="js/jquery.min.js"></script>
+    	<script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+
+        <script type="text/javascript" src="cordova.js"></script>
+    </body>
+</html>
