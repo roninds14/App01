@@ -21,9 +21,7 @@
         		document.addEventListener("deviceready", iniciar );
 
         		function iniciar(){
-        			$("#latitude").hide();
-        			$("#longitude").hide();
-        			$("#local").hide();
+        			$(".hide").hide();        			
 
         			$("#btn1").attr("disabled", "disabled");
         			$("#btn2").attr("disabled", "disabled");   
@@ -106,17 +104,49 @@
         				navigator.camera.getPicture( fotoSucesso, fotoErro, opFoto );
         		});
 
+        		$("#btn5").on("click", function(){
+        			var opFoto = {
+        				quality:50,
+        				sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        				destinationType: Camera.DestinationType.FILE_URI,
+        				mediaType: Camera.MediaType.PICTURE
+        			};
+
+        			navigator.camera.getPicture( galeriaSucesso, galeriaErro, opFoto );
+        		});
+
         		$("#btn6").on("click", function(){
         				window.location.href = "index.html";
         		}); 
 
+        		$("#btn7").on("click", function(){
+        				window.location.href = "index.html#hardware";
+        		}); 
+
+        		$("#btn12").on("click", function(){
+        				window.location.href = "index.html";
+        		}); 
+
         		function fotoSucesso(foto){
-        			alert( foto );
+        			//$("#exibeFoto").attr("src", foto);
+
+        			$("#exibeFoto").attr("src", "data:image/jpeg;base64," + foto );
         		};
 
         		function fotoErro(e){
         			alert( "Erro ao tirar foto: " + e.message );
-        		};    	
+        		};
+
+        		function galeriaSucesso( foto ){
+        			//$("#exibeFoto").attr("src", foto);
+
+        			$("#exibeFoto").attr("src", "data:image/jpeg;base64," + foto );
+        		};
+
+				function galeriaErro(e){
+					alert( "Erro ao tirar foto: " + e.message );
+				};
+
 			}
         </script>
     </head>
@@ -126,14 +156,15 @@
 	    		<h1>Meu App v. 1.0.0</h1>
 	    	</div>
 	    	<div data-role="main" id="conteudo" class="ui-content">
-	    		<div id="latitude"></div>
-	    		<div id="longitude"></div>
-	    		<div id="local"></div>
+	    		<div id="latitude" class="hide"></div>
+	    		<div id="longitude" class="hide"></div>
+	    		<div id="local" class="hide"></div>
 	    		<div id="mensagem"></div>
 
 	    		<button id="btn1">Exibir Geolocalização</button>
 	    		<button id="btn2">Exibir Mapa</button>
 	    		<button id="btn3">Camera</button>
+	    		<button id="btn7">Hardware</button>
 	    	</div>
 	    	<div data-role="footer" id="rodape">
 	    		<h1>Todos os direitos reservados</h1>
@@ -150,6 +181,28 @@
 	    		<button id="btn4">Tirar Foto</button>
 	    		<button id="btn5">Exibir Galeria</button>
 	    		<button id="btn6">Voltar</button>
+	    	</div>
+	    	<div data-role="footer" id="rodape">
+	    		<h1>Todos os direitos reservados</h1>
+	    	</div>
+	    </div>
+
+	    <div data-role="page" id ="hardware"> 
+	    	<div data-role="header">
+	    		<h1>Meu App v. 1.0.0</h1>
+	    	</div>
+	    	<div data-role="main" id="conteudo" class="ui-content">
+	    		<div id="exibirHardware" class="hide"></div>
+	    		<div id="exibirRede" class="hide"></div>
+	    		<div id="exibirBateria" class="hide"></div>
+	    		<div id="exibirAcelerometro" class="hide"></div>
+
+
+	    		<button id="btn8">Exibir Hardware</button>
+	    		<button id="btn9">Exibir Rede</button>
+	    		<button id="btn10">Exibir Bateria</button>
+	    		<button id="btn11">Exibir Acelerometro</button>
+	    		<button id="btn12">Voltar</button>
 	    	</div>
 	    	<div data-role="footer" id="rodape">
 	    		<h1>Todos os direitos reservados</h1>
